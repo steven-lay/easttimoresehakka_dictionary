@@ -19,6 +19,7 @@ export default function DictionaryApp() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [errorDetail, setErrorDetail] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedQuery(query), 250);
@@ -31,6 +32,7 @@ export default function DictionaryApp() {
     async function load() {
       setLoading(true);
       setError("");
+      setErrorDetail("");
 
       try {
         const params = new URLSearchParams();
@@ -44,6 +46,7 @@ export default function DictionaryApp() {
         const data = await response.json();
 
         if (!response.ok) {
+          setErrorDetail(data.detail || "");
           throw new Error(data.error || "Could not load entries");
         }
 
@@ -116,6 +119,9 @@ export default function DictionaryApp() {
           <p className={styles.meta}>
             {loading ? "Loading entries…" : error ? error : rangeLabel}
           </p>
+          {error && errorDetail ? (
+            <p className={styles.metaDetail}>{errorDetail}</p>
+          ) : null}
         </div>
       </header>
       <main className={`${styles.main} ${styles.shell}`}>

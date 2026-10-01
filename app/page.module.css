@@ -55,6 +55,17 @@
   font-weight: 500;
 }
 
+.metaDetail {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.metaDetail code {
+  font-size: 0.9em;
+}
+
 .main {
   margin-top: 18px;
 }

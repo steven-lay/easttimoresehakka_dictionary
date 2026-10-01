@@ -49,10 +49,33 @@ export async function GET(request) {
     return NextResponse.json({ entries, query, count: entries.length });
   } catch (error) {
     console.error("Failed to load entries", error);
+
+    const message = String(error?.message || error);
+    const detail = `${error?.name || "Error"}: ${message.split("\n")[0]}`;
+    let hint =
+      "Could not load dictionary entries. Check MONGODB_URI and that Atlas allows Vercel connections.";
+
+    if (/bad auth|authentication failed/i.test(message)) {
+      hint =
+        "MongoDB authentication failed. Check the username/password in MONGODB_URI (URL-encode special characters).";
+    } else if (/ENOTFOUND|querySrv|DNS|getaddrinfo/i.test(message)) {
+      hint =
+        "Could not reach MongoDB. Check the Atlas hostname in MONGODB_URI.";
+    } else if (
+      /timed out|Server selection timed out|MongoServerSelectionError|MongoNetworkError|ECONNREFUSED|not authorized|IP|whitelist|firewall/i.test(
+        message,
+      )
+    ) {
+      hint =
+        "MongoDB connection blocked or timed out. In Atlas → Network Access, add 0.0.0.0/0 so Vercel can connect, then wait a minute and retry.";
+    } else if (/Missing MONGODB_URI/i.test(message)) {
+      hint = message;
+    }
+
     return NextResponse.json(
       {
-        error:
-          "Could not load dictionary entries. Check MongoDB is running and MONGODB_URI in .env.local.",
+        error: hint,
+        detail,
         entries: [],
         count: 0,
       },
