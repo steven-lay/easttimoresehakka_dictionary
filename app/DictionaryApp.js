@@ -6,25 +6,19 @@ import EntryList from "../components/EntryList";
 import Pagination from "../components/Pagination";
 import ThemeToggle from "../components/ThemeToggle";
 import { groupEntries } from "../lib/groupEntries";
-import { sortGroupsByRelevance } from "../lib/searchRank";
+import { filterAndSortGroups } from "../lib/searchRank";
 import styles from "./page.module.css";
 
 const PAGE_SIZE = 25;
 
 export default function DictionaryApp() {
   const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [groups, setGroups] = useState([]);
-  const [count, setCount] = useState(0);
+  const [allGroups, setAllGroups] = useState([]);
+  const [recordCount, setRecordCount] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [errorDetail, setErrorDetail] = useState("");
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedQuery(query), 250);
-    return () => clearTimeout(timer);
-  }, [query]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -35,12 +29,7 @@ export default function DictionaryApp() {
       setErrorDetail("");
 
       try {
-        const params = new URLSearchParams();
-        if (debouncedQuery.trim()) {
-          params.set("q", debouncedQuery.trim());
-        }
-
-        const response = await fetch(`/api/entries?${params}`, {
+        const response = await fetch("/api/entries", {
           signal: controller.signal,
         });
         const data = await response.json();
@@ -50,13 +39,13 @@ export default function DictionaryApp() {
           throw new Error(data.error || "Could not load entries");
         }
 
-        setGroups(sortGroupsByRelevance(groupEntries(data.entries), debouncedQuery));
-        setCount(data.count);
+        setAllGroups(groupEntries(data.entries));
+        setRecordCount(data.count);
         setPage(1);
       } catch (err) {
         if (err.name === "AbortError") return;
-        setGroups([]);
-        setCount(0);
+        setAllGroups([]);
+        setRecordCount(0);
         setPage(1);
         setError(err.message);
       } finally {
@@ -68,7 +57,16 @@ export default function DictionaryApp() {
 
     load();
     return () => controller.abort();
-  }, [debouncedQuery]);
+  }, []);
+
+  const groups = useMemo(
+    () => filterAndSortGroups(allGroups, query),
+    [allGroups, query],
+  );
+
+  useEffect(() => {
+    setPage(1);
+  }, [query]);
 
   const pageCount = Math.max(1, Math.ceil(groups.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);
@@ -82,8 +80,8 @@ export default function DictionaryApp() {
     if (groups.length === 0) return "0 entries";
     const start = (currentPage - 1) * PAGE_SIZE + 1;
     const end = Math.min(currentPage * PAGE_SIZE, groups.length);
-    return `Showing ${start}–${end} of ${groups.length} entries (${count} records)`;
-  }, [groups.length, currentPage, count]);
+    return `Showing ${start}–${end} of ${groups.length} entries (${recordCount} records)`;
+  }, [groups.length, currentPage, recordCount]);
 
   function goToPage(nextPage) {
     setPage(nextPage);
@@ -142,7 +140,7 @@ export default function DictionaryApp() {
             <EntryList
               groups={pageGroups}
               loading={loading}
-              query={debouncedQuery}
+              query={query}
             />
           </>
         )}
