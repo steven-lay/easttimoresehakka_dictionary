@@ -91,6 +91,7 @@
   width: 18%;
   color: var(--muted);
   font-size: 0.82rem;
+  white-space: pre-line;
 }
 
 .also {

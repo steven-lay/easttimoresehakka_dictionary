@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/export-entries.cjs",
+    "export-entries": "node scripts/export-entries.cjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

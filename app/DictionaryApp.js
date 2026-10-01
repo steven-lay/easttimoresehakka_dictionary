@@ -2,17 +2,19 @@
 
 import { useEffect, useMemo, useState } from "react";
 import SearchBox from "../components/SearchBox";
+import LetterBrowse from "../components/LetterBrowse";
 import EntryList from "../components/EntryList";
 import Pagination from "../components/Pagination";
 import ThemeToggle from "../components/ThemeToggle";
 import { groupEntries } from "../lib/groupEntries";
-import { filterAndSortGroups } from "../lib/searchRank";
+import { availableLetters, filterAndSortGroups } from "../lib/searchRank";
 import styles from "./page.module.css";
 
 const PAGE_SIZE = 25;
 
 export default function DictionaryApp() {
   const [query, setQuery] = useState("");
+  const [letter, setLetter] = useState("");
   const [allGroups, setAllGroups] = useState([]);
   const [recordCount, setRecordCount] = useState(0);
   const [page, setPage] = useState(1);
@@ -28,13 +30,40 @@ export default function DictionaryApp() {
       setError("");
       setErrorDetail("");
 
+      let hasSnapshot = false;
+
+      try {
+        const snapshot = await fetch("/entries.json", {
+          signal: controller.signal,
+          cache: "force-cache",
+        });
+        if (snapshot.ok) {
+          const data = await snapshot.json();
+          if (Array.isArray(data.entries) && data.entries.length > 0) {
+            setAllGroups(groupEntries(data.entries));
+            setRecordCount(data.count ?? data.entries.length);
+            setPage(1);
+            setLoading(false);
+            hasSnapshot = true;
+          }
+        }
+      } catch (err) {
+        if (err.name === "AbortError") return;
+      }
+
       try {
         const response = await fetch("/api/entries", {
           signal: controller.signal,
+          cache: "no-store",
         });
         const data = await response.json();
 
         if (!response.ok) {
+          if (hasSnapshot) {
+            // Keep snapshot data; live refresh failed.
+            console.warn("Live dictionary refresh failed:", data.error || data.detail);
+            return;
+          }
           setErrorDetail(data.detail || "");
           throw new Error(data.error || "Could not load entries");
         }
@@ -42,8 +71,11 @@ export default function DictionaryApp() {
         setAllGroups(groupEntries(data.entries));
         setRecordCount(data.count);
         setPage(1);
+        setError("");
+        setErrorDetail("");
       } catch (err) {
         if (err.name === "AbortError") return;
+        if (hasSnapshot) return;
         setAllGroups([]);
         setRecordCount(0);
         setPage(1);
@@ -59,14 +91,16 @@ export default function DictionaryApp() {
     return () => controller.abort();
   }, []);
 
+  const letters = useMemo(() => availableLetters(allGroups), [allGroups]);
+
   const groups = useMemo(
-    () => filterAndSortGroups(allGroups, query),
-    [allGroups, query],
+    () => filterAndSortGroups(allGroups, query, letter),
+    [allGroups, query, letter],
   );
 
   useEffect(() => {
     setPage(1);
-  }, [query]);
+  }, [query, letter]);
 
   const pageCount = Math.max(1, Math.ceil(groups.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);
@@ -80,12 +114,21 @@ export default function DictionaryApp() {
     if (groups.length === 0) return "0 entries";
     const start = (currentPage - 1) * PAGE_SIZE + 1;
     const end = Math.min(currentPage * PAGE_SIZE, groups.length);
-    return `Showing ${start}–${end} of ${groups.length} entries (${recordCount} records)`;
-  }, [groups.length, currentPage, recordCount]);
+    const letterNote = letter ? ` · letter ${letter}` : "";
+    return `Showing ${start}–${end} of ${groups.length} entries (${recordCount} records)${letterNote}`;
+  }, [groups.length, currentPage, recordCount, letter]);
 
   function goToPage(nextPage) {
     setPage(nextPage);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function clearSearch() {
+    setQuery("");
+  }
+
+  function handleLetterChange(nextLetter) {
+    setLetter(nextLetter);
   }
 
   return (
@@ -113,7 +156,18 @@ export default function DictionaryApp() {
       </div>
       <header className={styles.header}>
         <div className={styles.shell}>
-          <SearchBox value={query} onChange={setQuery} />
+          <SearchBox
+            value={query}
+            onChange={setQuery}
+            onClear={clearSearch}
+          />
+          {!loading && !error ? (
+            <LetterBrowse
+              value={letter}
+              available={letters}
+              onChange={handleLetterChange}
+            />
+          ) : null}
           <p className={styles.meta}>
             {loading ? "Loading entries…" : error ? error : rangeLabel}
           </p>
@@ -140,7 +194,7 @@ export default function DictionaryApp() {
             <EntryList
               groups={pageGroups}
               loading={loading}
-              query={query}
+              query={query || letter}
             />
           </>
         )}

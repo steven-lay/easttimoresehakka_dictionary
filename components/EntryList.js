@@ -18,7 +18,6 @@ function formatDefinition(definition) {
 function definitionItems(definitions) {
   return (definitions || [])
     .map(formatDefinition)
-    .flatMap((text) => text.split(/[;；]/))
     .map((item) => item.trim())
     .filter(Boolean);
 }
