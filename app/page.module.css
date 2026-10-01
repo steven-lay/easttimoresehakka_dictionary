@@ -1,0 +1,88 @@
+.page {
+  width: 100%;
+  padding: 28px 0 72px;
+}
+
+.shell {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding-inline: 20px;
+}
+
+.intro {
+  margin-bottom: 8px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  width: 100%;
+  padding: 12px 0 10px;
+  background: var(--page-bg);
+  background-attachment: fixed;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+}
+
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.title {
+  margin: 0 0 10px;
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.blurb {
+  margin: 0 0 8px;
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.meta {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.main {
+  margin-top: 18px;
+}
+
+.empty {
+  color: var(--muted);
+  line-height: 1.5;
+  padding: 28px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.empty code {
+  font-size: 0.9em;
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 18px 0 64px;
+  }
+
+  .shell {
+    padding-inline: 16px;
+  }
+
+  .titleRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

@@ -1,0 +1,138 @@
+.wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  line-height: 1.38;
+}
+
+.table th,
+.table td {
+  padding: 8px 11px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+
+.table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--table-head);
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.group + .group tr:first-child td {
+  border-top: 1px solid color-mix(in srgb, var(--line) 80%, var(--ink) 8%);
+}
+
+.headRow td {
+  background: transparent;
+}
+
+.table tbody tr:hover td {
+  background: var(--row-hover);
+}
+
+.variantRow td {
+  background: var(--variant-row);
+  color: var(--variant-ink);
+}
+
+.romanisation {
+  width: 22%;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.romanisation sup {
+  font-size: 0.68em;
+  font-weight: 700;
+  line-height: 0;
+  color: inherit;
+}
+
+.chinese {
+  width: 12%;
+  font-family: var(--font-cjk), "Microsoft JhengHei", "PingFang TC", sans-serif;
+  font-size: 1.02rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.definitions {
+  width: 48%;
+}
+
+.definitionList {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.definitionList li + li {
+  margin-top: 2px;
+}
+
+.notes {
+  width: 18%;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.also {
+  display: inline-block;
+  margin-right: 5px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.6rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.alts {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 500;
+}
+
+.empty {
+  color: var(--muted);
+  line-height: 1.5;
+  padding: 28px;
+}
+
+@media (max-width: 700px) {
+  .table {
+    font-size: 0.82rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 7px 9px;
+  }
+
+  .romanisation,
+  .chinese {
+    white-space: normal;
+  }
+}

@@ -1,0 +1,41 @@
+.toggle {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card-solid);
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.03);
+  align-self: flex-start;
+}
+
+.button {
+  appearance: none;
+  border: 0;
+  border-radius: 7px;
+  padding: 6px 11px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.button:hover {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--line) 45%, transparent);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}

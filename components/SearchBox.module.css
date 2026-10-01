@@ -1,0 +1,44 @@
+.label {
+  display: block;
+}
+
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card-solid);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+  box-shadow: var(--shadow);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input::placeholder {
+  color: color-mix(in srgb, var(--muted) 85%, transparent);
+}
+
+.input:hover {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 3px var(--accent-soft),
+    var(--shadow);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
