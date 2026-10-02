@@ -19,6 +19,7 @@ export default function DictionaryApp() {
   const [recordCount, setRecordCount] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [checkingUpdates, setCheckingUpdates] = useState(false);
   const [error, setError] = useState("");
   const [errorDetail, setErrorDetail] = useState("");
 
@@ -27,6 +28,7 @@ export default function DictionaryApp() {
 
     async function load() {
       setLoading(true);
+      setCheckingUpdates(false);
       setError("");
       setErrorDetail("");
 
@@ -51,6 +53,8 @@ export default function DictionaryApp() {
         if (err.name === "AbortError") return;
       }
 
+      setCheckingUpdates(true);
+
       try {
         const response = await fetch("/api/entries", {
           signal: controller.signal,
@@ -60,7 +64,6 @@ export default function DictionaryApp() {
 
         if (!response.ok) {
           if (hasSnapshot) {
-            // Keep snapshot data; live refresh failed.
             console.warn("Live dictionary refresh failed:", data.error || data.detail);
             return;
           }
@@ -82,6 +85,7 @@ export default function DictionaryApp() {
         setError(err.message);
       } finally {
         if (!controller.signal.aborted) {
+          setCheckingUpdates(false);
           setLoading(false);
         }
       }
@@ -115,8 +119,11 @@ export default function DictionaryApp() {
     const start = (currentPage - 1) * PAGE_SIZE + 1;
     const end = Math.min(currentPage * PAGE_SIZE, groups.length);
     const letterNote = letter ? ` · letter ${letter}` : "";
-    return `Showing ${start}–${end} of ${groups.length} entries (${recordCount} records)${letterNote}`;
-  }, [groups.length, currentPage, recordCount, letter]);
+    const updateNote = checkingUpdates
+      ? " · Checking database for new entries…"
+      : "";
+    return `Showing ${start}–${end} of ${groups.length} entries (${recordCount} records)${letterNote}${updateNote}`;
+  }, [groups.length, currentPage, recordCount, letter, checkingUpdates]);
 
   function goToPage(nextPage) {
     setPage(nextPage);
