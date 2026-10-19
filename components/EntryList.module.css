@@ -68,9 +68,11 @@
 
 .chinese {
   width: 12%;
-  font-family: var(--font-cjk), "Microsoft JhengHei", "PingFang TC", sans-serif;
+  font-family: var(--font-cjk), "PingFang SC", "Microsoft YaHei", "Microsoft JhengHei",
+    sans-serif;
   font-size: 1.02rem;
-  font-weight: 500;
+  font-weight: 600;
+  font-synthesis: weight;
   white-space: nowrap;
 }
 

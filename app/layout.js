@@ -9,9 +9,12 @@ const manrope = Manrope({
 
 const notoSansSc = Noto_Sans_SC({
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: "600",
   variable: "--font-cjk",
   display: "swap",
+  preload: false,
+  adjustFontFallback: false,
+  fallback: ["PingFang SC", "Microsoft YaHei", "Microsoft JhengHei", "sans-serif"],
 });
 
 export const metadata = {
