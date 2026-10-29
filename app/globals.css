@@ -26,22 +26,22 @@ html[data-theme="light"] {
 
 html[data-theme="dark"] {
   color-scheme: dark;
-  --paper: #0b1220;
-  --paper-deep: #070d18;
-  --ink: #e8eef8;
-  --muted: #94a3b8;
-  --line: #243044;
-  --card: rgba(17, 26, 43, 0.88);
-  --card-solid: #111a2b;
+  --paper: #141414;
+  --paper-deep: #0f0f0f;
+  --ink: #ececec;
+  --muted: #a3a3a3;
+  --line: #2e2e2e;
+  --card: rgba(28, 28, 28, 0.92);
+  --card-solid: #1c1c1c;
   --accent: #2dd4bf;
   --accent-soft: rgba(45, 212, 191, 0.14);
-  --table-head: #152033;
-  --row-hover: #182438;
-  --variant-row: #131c2e;
-  --variant-ink: #cbd5e1;
-  --glow-a: rgba(45, 212, 191, 0.07);
-  --glow-b: rgba(59, 130, 246, 0.06);
-  --shadow: 0 1px 0 rgba(255, 255, 255, 0.03), 0 16px 40px rgba(0, 0, 0, 0.35);
+  --table-head: #222222;
+  --row-hover: #262626;
+  --variant-row: #1a1a1a;
+  --variant-ink: #d4d4d4;
+  --glow-a: rgba(45, 212, 191, 0.06);
+  --glow-b: rgba(255, 255, 255, 0.03);
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.03), 0 16px 40px rgba(0, 0, 0, 0.4);
   --page-bg:
     radial-gradient(900px 420px at 85% -20%, var(--glow-a), transparent 60%),
     radial-gradient(700px 360px at 110% 8%, var(--glow-b), transparent 55%),
@@ -51,22 +51,22 @@ html[data-theme="dark"] {
 @media (prefers-color-scheme: dark) {
   html:not([data-theme]) {
     color-scheme: dark;
-    --paper: #0b1220;
-    --paper-deep: #070d18;
-    --ink: #e8eef8;
-    --muted: #94a3b8;
-    --line: #243044;
-    --card: rgba(17, 26, 43, 0.88);
-    --card-solid: #111a2b;
+    --paper: #141414;
+    --paper-deep: #0f0f0f;
+    --ink: #ececec;
+    --muted: #a3a3a3;
+    --line: #2e2e2e;
+    --card: rgba(28, 28, 28, 0.92);
+    --card-solid: #1c1c1c;
     --accent: #2dd4bf;
     --accent-soft: rgba(45, 212, 191, 0.14);
-    --table-head: #152033;
-    --row-hover: #182438;
-    --variant-row: #131c2e;
-    --variant-ink: #cbd5e1;
-    --glow-a: rgba(45, 212, 191, 0.07);
-    --glow-b: rgba(59, 130, 246, 0.06);
-    --shadow: 0 1px 0 rgba(255, 255, 255, 0.03), 0 16px 40px rgba(0, 0, 0, 0.35);
+    --table-head: #222222;
+    --row-hover: #262626;
+    --variant-row: #1a1a1a;
+    --variant-ink: #d4d4d4;
+    --glow-a: rgba(45, 212, 191, 0.06);
+    --glow-b: rgba(255, 255, 255, 0.03);
+    --shadow: 0 1px 0 rgba(255, 255, 255, 0.03), 0 16px 40px rgba(0, 0, 0, 0.4);
     --page-bg:
       radial-gradient(900px 420px at 85% -20%, var(--glow-a), transparent 60%),
       radial-gradient(700px 360px at 110% 8%, var(--glow-b), transparent 55%),
