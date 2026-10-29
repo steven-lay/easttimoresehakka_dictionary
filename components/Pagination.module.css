@@ -9,7 +9,7 @@
 .button {
   appearance: none;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 0;
   padding: 8px 12px;
   background: var(--card-solid);
   color: var(--ink);

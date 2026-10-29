@@ -3,8 +3,7 @@
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--card);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(8px);
+  box-shadow: none;
 }
 
 .table {
@@ -103,7 +102,7 @@
   display: inline-block;
   margin-right: 5px;
   padding: 0 5px;
-  border-radius: 4px;
+  border-radius: 0;
   background: var(--accent-soft);
   color: var(--accent);
   font-size: 0.6rem;

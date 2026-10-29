@@ -1,4 +1,4 @@
-.page {
+﻿.page {
   width: min(860px, calc(100% - 32px));
   margin: 0 auto;
   padding: 28px 0 72px;
@@ -55,7 +55,7 @@
   margin-top: 12px;
   padding: 12px;
   border: 1px dashed var(--line);
-  border-radius: 10px;
+  border-radius: 0;
   background: color-mix(in srgb, var(--paper) 70%, var(--card-solid));
 }
 
@@ -93,7 +93,7 @@
 .textarea {
   width: 100%;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 0;
   padding: 10px 12px;
   background: var(--card-solid);
   color: var(--ink);
@@ -127,7 +127,7 @@
 .primary,
 .secondary {
   appearance: none;
-  border-radius: 10px;
+  border-radius: 0;
   padding: 10px 14px;
   font: inherit;
   font-size: 0.9rem;
@@ -199,7 +199,7 @@
   width: 100%;
   text-align: left;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 0;
   padding: 10px 12px;
   background: var(--card-solid);
   color: var(--ink);

@@ -16,8 +16,8 @@ html[data-theme="light"] {
   --variant-ink: #334155;
   --glow-a: rgba(15, 118, 110, 0.08);
   --glow-b: rgba(37, 99, 235, 0.06);
-  --shadow: 0 1px 0 rgba(15, 23, 42, 0.04), 0 12px 32px rgba(15, 23, 42, 0.06);
-  --radius: 14px;
+  --shadow: none;
+  --radius: 0;
   --page-bg:
     radial-gradient(900px 420px at 85% -20%, var(--glow-a), transparent 60%),
     radial-gradient(700px 360px at 110% 8%, var(--glow-b), transparent 55%),
@@ -41,7 +41,7 @@ html[data-theme="dark"] {
   --variant-ink: #d4d4d4;
   --glow-a: rgba(45, 212, 191, 0.06);
   --glow-b: rgba(255, 255, 255, 0.03);
-  --shadow: 0 1px 0 rgba(255, 255, 255, 0.03), 0 16px 40px rgba(0, 0, 0, 0.4);
+  --shadow: none;
   --page-bg:
     radial-gradient(900px 420px at 85% -20%, var(--glow-a), transparent 60%),
     radial-gradient(700px 360px at 110% 8%, var(--glow-b), transparent 55%),
@@ -66,7 +66,7 @@ html[data-theme="dark"] {
     --variant-ink: #d4d4d4;
     --glow-a: rgba(45, 212, 191, 0.06);
     --glow-b: rgba(255, 255, 255, 0.03);
-    --shadow: 0 1px 0 rgba(255, 255, 255, 0.03), 0 16px 40px rgba(0, 0, 0, 0.4);
+    --shadow: none;
     --page-bg:
       radial-gradient(900px 420px at 85% -20%, var(--glow-a), transparent 60%),
       radial-gradient(700px 360px at 110% 8%, var(--glow-b), transparent 55%),

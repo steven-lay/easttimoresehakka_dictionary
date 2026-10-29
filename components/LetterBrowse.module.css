@@ -9,7 +9,7 @@
   appearance: none;
   min-width: 2rem;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 0;
   padding: 5px 8px;
   background: var(--card-solid);
   color: var(--ink);

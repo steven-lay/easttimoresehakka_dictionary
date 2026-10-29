@@ -3,16 +3,16 @@
   gap: 2px;
   padding: 3px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 0;
   background: var(--card-solid);
-  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.03);
+  box-shadow: none;
   align-self: flex-start;
 }
 
 .button {
   appearance: none;
   border: 0;
-  border-radius: 7px;
+  border-radius: 0;
   padding: 6px 11px;
   background: transparent;
   color: var(--muted);

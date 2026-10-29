@@ -14,7 +14,7 @@
   width: 100%;
   padding: 14px 16px;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 0;
   background: var(--card-solid);
   color: var(--ink);
   font: inherit;
@@ -43,7 +43,7 @@
   appearance: none;
   flex-shrink: 0;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 0;
   padding: 12px 14px;
   background: var(--card-solid);
   color: var(--ink);
