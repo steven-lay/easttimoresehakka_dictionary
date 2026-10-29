@@ -161,6 +161,8 @@
     row-gap: 6px;
     padding: 10px 12px;
     border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 72px;
   }
 
   .table th,

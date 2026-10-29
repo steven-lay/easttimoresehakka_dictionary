@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import SearchBox from "../components/SearchBox";
 import LetterBrowse from "../components/LetterBrowse";
 import EntryList from "../components/EntryList";
@@ -30,6 +30,7 @@ function useIsMobile() {
 export default function DictionaryApp() {
   const isMobile = useIsMobile();
   const [query, setQuery] = useState("");
+  const deferredQuery = useDeferredValue(query);
   const [letter, setLetter] = useState("");
   const [jumpLetter, setJumpLetter] = useState("");
   const [allGroups, setAllGroups] = useState([]);
@@ -39,6 +40,7 @@ export default function DictionaryApp() {
   const [checkingUpdates, setCheckingUpdates] = useState(false);
   const [error, setError] = useState("");
   const [errorDetail, setErrorDetail] = useState("");
+  const searchPending = query !== deferredQuery;
 
   useEffect(() => {
     const controller = new AbortController();
@@ -116,13 +118,13 @@ export default function DictionaryApp() {
 
   const groups = useMemo(
     () =>
-      filterAndSortGroups(allGroups, query, isMobile ? "" : letter),
-    [allGroups, query, letter, isMobile],
+      filterAndSortGroups(allGroups, deferredQuery, isMobile ? "" : letter),
+    [allGroups, deferredQuery, letter, isMobile],
   );
 
   useEffect(() => {
     setPage(1);
-  }, [query, letter]);
+  }, [deferredQuery, letter]);
 
   useEffect(() => {
     if (isMobile) {
@@ -239,7 +241,13 @@ export default function DictionaryApp() {
             />
           ) : null}
           <p className={styles.meta}>
-            {loading ? "Loading entries…" : error ? error : rangeLabel}
+            {loading
+              ? "Loading entries…"
+              : error
+                ? error
+                : searchPending
+                  ? "Searching…"
+                  : rangeLabel}
           </p>
           {error && errorDetail ? (
             <p className={styles.metaDetail}>{errorDetail}</p>
@@ -264,7 +272,7 @@ export default function DictionaryApp() {
             <EntryList
               groups={pageGroups}
               loading={loading}
-              query={query || (!isMobile ? letter : "")}
+              query={deferredQuery || (!isMobile ? letter : "")}
             />
           </>
         )}
