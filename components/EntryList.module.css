@@ -156,8 +156,9 @@
 
   .table tr {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 6px;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    column-gap: 6px;
+    row-gap: 6px;
     padding: 10px 12px;
     border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
   }
@@ -173,19 +174,30 @@
 
   .romanisation {
     grid-column: 1;
+    grid-row: 1;
     font-size: 0.95rem;
     white-space: normal;
   }
 
   .chinese {
-    grid-column: 1;
+    grid-column: 2;
+    grid-row: 1;
     justify-self: start;
-    white-space: normal;
+    align-self: start;
+    white-space: nowrap;
+  }
+
+  .chinese::before {
+    content: "(";
+  }
+
+  .chinese::after {
+    content: ")";
   }
 
   .definitions,
   .notes {
-    grid-column: 1;
+    grid-column: 1 / -1;
   }
 
   .definitions {
