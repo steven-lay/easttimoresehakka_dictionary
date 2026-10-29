@@ -1,4 +1,5 @@
 import Romanisation from "./Romanisation";
+import { groupFirstLetter } from "../lib/searchRank";
 import styles from "./EntryList.module.css";
 
 function formatDefinition(definition) {
@@ -76,8 +77,10 @@ export default function EntryList({ groups, loading, query }) {
     );
   }
 
+  let previousLetter = null;
+
   return (
-    <div className={styles.wrap}>
+    <div className={styles.wrap} id="entry-list">
       <table className={styles.table}>
         <thead>
           <tr>
@@ -89,9 +92,16 @@ export default function EntryList({ groups, loading, query }) {
         </thead>
         {groups.map((group) => {
           const key = group.head?._id || group.variants[0]?._id;
+          const letter = groupFirstLetter(group);
+          const isFirstOfLetter = letter !== previousLetter;
+          previousLetter = letter;
 
           return (
-            <tbody key={key} className={styles.group}>
+            <tbody
+              key={key}
+              id={isFirstOfLetter ? `letter-${letter}` : undefined}
+              className={styles.group}
+            >
               {group.head ? (
                 <EntryRow key={group.head._id} entry={group.head} />
               ) : null}

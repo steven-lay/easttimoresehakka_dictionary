@@ -11,10 +11,27 @@ import { availableLetters, filterAndSortGroups } from "../lib/searchRank";
 import styles from "./page.module.css";
 
 const PAGE_SIZE = 25;
+const MOBILE_QUERY = "(max-width: 700px)";
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(MOBILE_QUERY);
+    const update = () => setIsMobile(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return isMobile;
+}
 
 export default function DictionaryApp() {
+  const isMobile = useIsMobile();
   const [query, setQuery] = useState("");
   const [letter, setLetter] = useState("");
+  const [jumpLetter, setJumpLetter] = useState("");
   const [allGroups, setAllGroups] = useState([]);
   const [recordCount, setRecordCount] = useState(0);
   const [page, setPage] = useState(1);
@@ -98,32 +115,54 @@ export default function DictionaryApp() {
   const letters = useMemo(() => availableLetters(allGroups), [allGroups]);
 
   const groups = useMemo(
-    () => filterAndSortGroups(allGroups, query, letter),
-    [allGroups, query, letter],
+    () =>
+      filterAndSortGroups(allGroups, query, isMobile ? "" : letter),
+    [allGroups, query, letter, isMobile],
   );
 
   useEffect(() => {
     setPage(1);
   }, [query, letter]);
 
+  useEffect(() => {
+    if (isMobile) {
+      setLetter("");
+    } else {
+      setJumpLetter("");
+    }
+  }, [isMobile]);
+
   const pageCount = Math.max(1, Math.ceil(groups.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);
 
   const pageGroups = useMemo(() => {
+    if (isMobile) return groups;
     const start = (currentPage - 1) * PAGE_SIZE;
     return groups.slice(start, start + PAGE_SIZE);
-  }, [groups, currentPage]);
+  }, [groups, currentPage, isMobile]);
 
   const rangeLabel = useMemo(() => {
     if (groups.length === 0) return "0 entries";
-    const start = (currentPage - 1) * PAGE_SIZE + 1;
-    const end = Math.min(currentPage * PAGE_SIZE, groups.length);
-    const letterNote = letter ? ` · letter ${letter}` : "";
+    const activeLetter = isMobile ? jumpLetter : letter;
+    const letterNote = activeLetter ? ` · letter ${activeLetter}` : "";
     const updateNote = checkingUpdates
       ? " · Checking database for new entries…"
       : "";
+    if (isMobile) {
+      return `${groups.length} entries (${recordCount} records)${letterNote}${updateNote}`;
+    }
+    const start = (currentPage - 1) * PAGE_SIZE + 1;
+    const end = Math.min(currentPage * PAGE_SIZE, groups.length);
     return `Showing ${start}–${end} of ${groups.length} entries (${recordCount} records)${letterNote}${updateNote}`;
-  }, [groups.length, currentPage, recordCount, letter, checkingUpdates]);
+  }, [
+    groups.length,
+    currentPage,
+    recordCount,
+    letter,
+    jumpLetter,
+    checkingUpdates,
+    isMobile,
+  ]);
 
   function goToPage(nextPage) {
     setPage(nextPage);
@@ -134,7 +173,31 @@ export default function DictionaryApp() {
     setQuery("");
   }
 
+  function scrollToLetter(nextLetter) {
+    const targetId = nextLetter ? `letter-${nextLetter}` : "entry-list";
+    const target = document.getElementById(targetId);
+    const header = document.getElementById("dictionary-header");
+    if (!target) return;
+
+    const headerHeight = header?.getBoundingClientRect().height ?? 0;
+    const top =
+      window.scrollY +
+      target.getBoundingClientRect().top -
+      headerHeight -
+      12;
+
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  }
+
   function handleLetterChange(nextLetter) {
+    if (isMobile) {
+      setLetter("");
+      setJumpLetter(nextLetter);
+      // Wait a frame so the full unfiltered list is painted before jumping.
+      requestAnimationFrame(() => scrollToLetter(nextLetter));
+      return;
+    }
+    setJumpLetter("");
     setLetter(nextLetter);
   }
 
@@ -161,7 +224,7 @@ export default function DictionaryApp() {
           </div>
         </div>
       </div>
-      <header className={styles.header}>
+      <header className={styles.header} id="dictionary-header">
         <div className={styles.shell}>
           <SearchBox
             value={query}
@@ -170,7 +233,7 @@ export default function DictionaryApp() {
           />
           {!loading && !error ? (
             <LetterBrowse
-              value={letter}
+              value={isMobile ? jumpLetter : letter}
               available={letters}
               onChange={handleLetterChange}
             />
@@ -191,7 +254,7 @@ export default function DictionaryApp() {
           </p>
         ) : (
           <>
-            {!loading ? (
+            {!loading && !isMobile ? (
               <Pagination
                 page={currentPage}
                 pageCount={pageCount}
@@ -201,7 +264,7 @@ export default function DictionaryApp() {
             <EntryList
               groups={pageGroups}
               loading={loading}
-              query={query || letter}
+              query={query || (!isMobile ? letter : "")}
             />
           </>
         )}
