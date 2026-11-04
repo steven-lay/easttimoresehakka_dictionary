@@ -1,7 +1,7 @@
 import AdminApp from "./AdminApp";
 
 export const metadata = {
-  title: "Admin · East Timorese Hakka-English word list",
+  title: "Admin",
   robots: {
     index: false,
     follow: false,
