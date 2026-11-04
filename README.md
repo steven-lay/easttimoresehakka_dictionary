@@ -1,4 +1,4 @@
-# English–Hakka dictionary
+# East Timorese Hakka-English word list
 
 Single-page Next.js interface over the `dictionary.englishhakka` MongoDB collection.
 

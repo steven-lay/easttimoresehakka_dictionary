@@ -18,9 +18,9 @@ const notoSansSc = Noto_Sans_SC({
 });
 
 export const metadata = {
-  title: "English–Hakka Dictionary",
+  title: "East Timorese Hakka-English word list",
   description:
-    "Search English, Hakka romanisation, and Chinese entries from the dictionary database.",
+    "Search English, Hakka romanisation, and Chinese entries from the East Timorese Hakka-English word list.",
 };
 
 const themeInitScript = `
